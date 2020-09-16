@@ -16,7 +16,7 @@ class database {
     db_connect() {
         connection.connect(function (err) {
             if (err) { console.log(err); }
-            console.log(`Connected!`);
+            console.log(`Database Connected!`);
         });
     }
 

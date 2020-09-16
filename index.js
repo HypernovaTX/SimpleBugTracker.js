@@ -7,7 +7,7 @@ const dbimport = require('./src/dbdriver.js');
 const db = new dbimport();
 
 app.get('/', function (req, res) {
-    db.db_query();
+    db.db_connect();
     res.send('Hello World');
 })
 
