@@ -1,0 +1,9 @@
+{
+    "database": {
+        "server": "localhost",
+        "name": "hypernova",
+        "user": "bugtracker",
+        "password": "_database_password_",
+        "prefix": "hbt_"
+    }
+}
