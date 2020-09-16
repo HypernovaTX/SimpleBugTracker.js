@@ -5,24 +5,28 @@ var cors = require('cors');
 app.use(cors());
 
 const CONFIG = require("../config.json");
-const connection = {
+const connection = mysql.createConnection({
     user: CONFIG.database.user,
     password: CONFIG.database.password,
     server: CONFIG.database.server, 
     database: CONFIG.database.name 
-};
+});
 
 class database {
-
-    static db_query() {
-        mysql.connect(connection, function (err) {
+    db_connect() {
+        connection.connect(function (err) {
             if (err) { console.log(err); }
+            console.log(`Connected!`);
         });
     }
 
-    static db_query_item(input = '') {
+    db_disconnect() {
+        connection.close
+    }
+
+    db_query_item(input = '') {
         
     }
 }
 
-module.exports(database);
+module.exports = database;
