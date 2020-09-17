@@ -5,12 +5,17 @@ app.use(cors());
 
 const dbimport = require('./src/dbdriver.js');
 const db = new dbimport();
+const CONFIG = require("./config.json");
+let get_output = '';
 
-app.get('/', function (req, res) {
-    const CONFIG = require("./config.json");
+app.get('/', function (req, res, queryCallback) {
     db.db_connect();
-    const get_output = db.db_query(`SELECT * FROM ${CONFIG.database.prefix}tickets`);
-    res.send('Hello World <br><br>MySQL data pulled: ' + JSON.stringify(get_output));
+    db.db_query(`SELECT * FROM ${CONFIG.database.prefix}tickets`, (rows) => {
+        if (!rows.length) { queryCallback(res.send('No results!')); }
+        queryCallback(res.send(`MySQL data pulled: ${JSON.stringify(rows)}`));
+        db.db_disconnect();
+        res.end();
+    });
 })
 
 var server = app.listen(8080, function () {
