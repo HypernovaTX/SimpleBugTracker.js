@@ -4,6 +4,6 @@
         "name": "hypernova",
         "user": "bugtracker",
         "password": "_database_password_",
-        "prefix": "hbt_"
+        "prefix": "nbt_"
     }
 }
