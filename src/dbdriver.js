@@ -13,21 +13,22 @@ const DBCONFIG = {
     database: CONFIG.database.name 
 }
 let connection = mysql.createConnection(DBCONFIG);
+// ^ since we initialized "connection" as the right variable, we need to end this unused connection
 connection.end();
+
 
 class database {
     db_connect() {
         connection = mysql.createConnection(DBCONFIG);
-
-        connection.connect(function (err) {
-            if (err) { console.log(err); }
+        connection.connect(function (error) {
+            if (error) { console.log(error); }
             console.log(`[Database] Connected!`);
         });
     }
 
     db_disconnect() {
-        connection.end(function (err) {
-            if (err) { console.log(`[Database] Error: ${err.message}`); }
+        connection.end(function (error) {
+            if (error) { console.log(`[Database] Error: ${error.message}`); }
             console.log(`[Database] Disconnected!`);
         });
     }
@@ -52,7 +53,7 @@ class database {
     db_query(input, queryCallback) {
         connection.query(input, (error, rows) => {
             if (error || input === null) {
-                console.log(error);
+                console.log(`[Database] Error: ${error.message || 'input is NULL'}`);
                 return queryCallback(error);
             }
           
