@@ -55,12 +55,13 @@ class database {
 
     /** build query - select
      * @param {[string]} columns - Columns for SELECT
-     * @param {*} table - table for FROM
+     * @param {*} table - table for FROM (DO NOT INCLUDE PREFIX!!)
      * @returns {string} - SELECT <columns> FROM <table>
      */
     db_buildquery_select(columns = ['*'], table) {
         if (table === null) { return ''; }
-        return `SELECT ${columns.join(', ')} FROM ${table}`;
+        return `SELECT ${columns.join(', ')}
+            FROM ${CONFIG.database.prefix + table}`;
     }
 
     /** build query - where
@@ -71,7 +72,7 @@ class database {
         return `WHERE (${statements})`;
     }
     /** build query - insert
-     * @param {table} table - which table to insert?
+     * @param {table} table - which table to insert (DO NOT INCLUDE PREFIX!!)
      * @param {[string]} columns - Columns for insert
      * @param {[string]} values - Values to insert
      * @returns {string} - INSERT INTO <table> (<columns>) VALUES (<values>)
@@ -80,7 +81,8 @@ class database {
         if (table === null || columns === [''] || values === ['']) {
             return '';
         }
-        return `INSERT INTO ${table} (${columns.join(', ')})
+        return `INSERT INTO ${CONFIG.database.prefix + table}
+            (${columns.join(', ')})
             VALUES (${values.join(', ')})`
     }
 
