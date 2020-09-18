@@ -33,23 +33,6 @@ class database {
         });
     }
 
-    /*db_query(input = '', queryCallback) {
-        let output = 'N/A';
-        if (input === '' || input === null) {
-            console.log('Input for the query is empty or null!!!');
-            this.db_disconnect();
-            return '';
-        }
-        
-        this.
-        
-        console.log(`Test to make sure this line runs outside of the query.`);
-        console.log(`RESULT: ${output}`);
-        
-        this.db_disconnect();
-        return queryCallback(output);
-    }*/
-
     db_query(input, queryCallback) {
         connection.query(input, (error, rows) => {
             if (error || input === null) {
@@ -63,7 +46,20 @@ class database {
         });
     }
 
-    //db_query_
+    db_buildquery_select(columns = '*', table) {
+        if (table === null) { return ''; }
+        return `SELECT ${columns} FROM ${table}`;
+    }
+    db_buildquery_where(statements = '') {
+        return `WHERE (${statements})`;
+    }
+    db_buildquery_insert(table, columns = [''], values = ['']) {
+        if (table === null || columns === [''] || values === ['']) {
+            return '';
+        }
+        return `INSERT INTO ${table}(${columns.join(', ')})
+            VALUES (${values.join(', ')})`
+    }
 }
 
 module.exports = database;
