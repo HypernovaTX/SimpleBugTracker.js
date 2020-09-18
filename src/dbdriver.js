@@ -13,11 +13,13 @@ const DBCONFIG = {
     database: CONFIG.database.name 
 }
 let connection = mysql.createConnection(DBCONFIG);
-// ^ since we initialized "connection" as the right variable, we need to end this unused connection
+// ↑ Since we initialized "connection" as the right variable.
+// ↓ we need to end this unused connection.
 connection.end();
 
 
 class database {
+    //Run this before every query
     db_connect() {
         connection = mysql.createConnection(DBCONFIG);
         connection.connect(function (error) {
@@ -26,6 +28,7 @@ class database {
         });
     }
 
+    //To prevent unused processes, this MUST be executed after running a query
     db_disconnect() {
         connection.end(function (error) {
             if (error) { console.log(`[Database] Error: ${error.message}`); }
@@ -33,6 +36,10 @@ class database {
         });
     }
 
+    /** Do the query
+     * @param {string} input - The query that needs to run, please use db_buildquery_* functions
+     * @param {(rows) => {}} queryCallback - Needs to have a callback: (rows) => { <codes to obtain "rows" (as object)> }
+     */
     db_query(input, queryCallback) {
         connection.query(input, (error, rows) => {
             if (error || input === null) {
@@ -46,20 +53,39 @@ class database {
         });
     }
 
-    db_buildquery_select(columns = '*', table) {
+    /** build query - select
+     * @param {[string]} columns - Columns for SELECT
+     * @param {*} table - table for FROM
+     * @returns {string} - SELECT <columns> FROM <table>
+     */
+    db_buildquery_select(columns = ['*'], table) {
         if (table === null) { return ''; }
-        return `SELECT ${columns} FROM ${table}`;
+        return `SELECT ${columns.join(', ')} FROM ${table}`;
     }
+
+    /** build query - where
+     * @param {string} statements
+     * @returns {string} - WHERE <statements>
+     */
     db_buildquery_where(statements = '') {
         return `WHERE (${statements})`;
     }
+    /** build query - insert
+     * @param {table} table - which table to insert?
+     * @param {[string]} columns - Columns for insert
+     * @param {[string]} values - Values to insert
+     * @returns {string} - INSERT INTO <table> (<columns>) VALUES (<values>)
+     */
     db_buildquery_insert(table, columns = [''], values = ['']) {
         if (table === null || columns === [''] || values === ['']) {
             return '';
         }
-        return `INSERT INTO ${table}(${columns.join(', ')})
+        return `INSERT INTO ${table} (${columns.join(', ')})
             VALUES (${values.join(', ')})`
     }
+
+    //Q: Why isn't there a delete query?
+    //A: To keep everything in record, all queries are kept in the database.
 }
 
 module.exports = database;
