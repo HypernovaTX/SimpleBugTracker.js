@@ -61,7 +61,7 @@ class database {
     db_buildquery_select(columns = ['*'], table) {
         if (table === null) { return ''; }
         return `SELECT ${columns.join(', ')}
-            FROM ${CONFIG.database.prefix + table}`;
+            FROM ${CONFIG.database.prefix + table} `;
     }
 
     /** build query - where
@@ -69,7 +69,7 @@ class database {
      * @returns {string} - WHERE <statements>
      */
     db_buildquery_where(statements = '') {
-        return `WHERE (${statements})`;
+        return `WHERE (${statements}) `;
     }
     /** build query - insert
      * @param {table} table - which table to insert (DO NOT INCLUDE PREFIX!!)
@@ -83,7 +83,7 @@ class database {
         }
         return `INSERT INTO ${CONFIG.database.prefix + table}
             (${columns.join(', ')})
-            VALUES (${values.join(', ')})`
+            VALUES (${values.join(', ')}) `
     }
 
     //Q: Why isn't there a delete query?
