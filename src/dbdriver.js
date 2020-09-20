@@ -81,6 +81,9 @@ class database {
         if (table === null || columns === [''] || values === ['']) {
             return '';
         }
+        columns.forEach(number => {
+            number
+        });
         return `INSERT INTO ${CONFIG.database.prefix + table}
             (${columns.join(', ')})
             VALUES (${values.join(', ')}) `
