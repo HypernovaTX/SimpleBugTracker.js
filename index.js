@@ -11,6 +11,8 @@ const db = new dbimport();
 app.get('/', function (req, res, queryCallback) {
     db.db_connect();
     const query = db.db_buildquery_select(['*'], 'tickets') + db.db_buildquery_where('tid = 1');
+
+    //make a callback for the database
     db.db_query(query, (rows) => {
         if (!rows.length) { queryCallback(res.send('No results!')); }
         queryCallback(res.send(`MySQL data pulled: ${JSON.stringify(rows)}`));
