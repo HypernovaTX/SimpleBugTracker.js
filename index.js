@@ -15,13 +15,13 @@ app.get('/', function (req, res, queryCallback) {
     //make a callback for the database
     db.db_query(query, (rows) => {
         if (!rows.length) { queryCallback(res.send('No results!')); }
-        queryCallback(res.send(`MySQL data pulled: ${JSON.stringify(rows)}`));
+        queryCallback(res.send(`${JSON.stringify(rows)}`));
         db.db_disconnect();
         res.end();
     });
 })
 
-axios.post('/list', data, {
+/*axios.post('/list', data, {
     headers: {
         'key': CONFIG.api.key,
         'Accept' : 'application/json',
@@ -33,7 +33,7 @@ axios.post('/list', data, {
 })
 .catch((error) => {
     return  error;
-});
+});*/
 
 var server = app.listen(8080, function () {
     var host = server.address().address;
