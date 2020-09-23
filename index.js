@@ -5,8 +5,8 @@ app.use(cors());
 
 const dbimport = require('./src/dbdriver.js');
 const db = new dbimport();
-//const CONFIG = require("./config.json");
-//let get_output = '';
+const CONFIG = require("./config.json");
+let get_output = '';
 
 app.get('/', function (req, res, queryCallback) {
     db.db_connect();
@@ -23,7 +23,7 @@ app.get('/', function (req, res, queryCallback) {
 
 axios.post('/list', data, {
     headers: {
-        'authorization': your_token,
+        'key': CONFIG.api.key,
         'Accept' : 'application/json',
         'Content-Type': 'application/json'
     }
