@@ -10,7 +10,7 @@ let get_output = '';
 
 app.get('/', function (req, res, queryCallback) {
     db.db_connect();
-    const query = db.db_buildquery_select(['*'], 'tickets') + db.db_buildquery_where('tid = 1');
+    const query = db.db_buildquery_select(['*'], 'tickets');
 
     //make a callback for the database
     db.db_query(query, (rows) => {
