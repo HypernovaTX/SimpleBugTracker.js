@@ -21,6 +21,20 @@ app.get('/', function (req, res, queryCallback) {
     });
 })
 
+axios.post('/list', data, {
+    headers: {
+        'authorization': your_token,
+        'Accept' : 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => {
+    return  response;
+})
+.catch((error) => {
+    return  error;
+});
+
 var server = app.listen(8080, function () {
     var host = server.address().address;
     var port = server.address().port;
