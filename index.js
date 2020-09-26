@@ -10,8 +10,13 @@ let get_output = '';
 
 app.get('/', function (req, res, queryCallback) {
     db.db_connect();
-    const query = db.db_buildquery_select(['*'], 'tickets');
-
+    let query = db.db_buildquery_select([
+        't.*',
+        'u.name AS username',
+        's.name AS statusname'
+    ], 't', 'tickets');
+    query += db.db_buildquery_join('users', 'u', 'ON (u.uid = t.uid)');
+    query += db.db_buildquery_join('status', 's', 'ON (s.stid = t.status)');
     //make a callback for the database
     db.db_query(query, (rows) => {
         if (!rows.length) { queryCallback(res.send('No results!')); }
