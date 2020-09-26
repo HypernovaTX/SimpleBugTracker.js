@@ -13,10 +13,15 @@ app.get('/', function (req, res, queryCallback) {
     let query = db.db_buildquery_select([
         't.*',
         'u.name AS username',
-        's.name AS statusname'
+        's.name AS statusname',
+        's.color AS statuscolor',
+        'p.name AS priorityname',
+        'p.color AS prioritycolor'
     ], 't', 'tickets');
     query += db.db_buildquery_join('users', 'u', 'ON (u.uid = t.uid)');
     query += db.db_buildquery_join('status', 's', 'ON (s.stid = t.status)');
+    query += db.db_buildquery_join('priority', 'p', 'ON (p.prid = t.priority)');
+    console.log(`QUERY ---------- ${query}`);
     //make a callback for the database
     db.db_query(query, (rows) => {
         if (!rows.length) { queryCallback(res.send('No results!')); }
