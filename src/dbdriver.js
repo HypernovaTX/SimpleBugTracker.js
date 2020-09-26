@@ -88,6 +88,21 @@ class database {
         return `JOIN ${CONFIG.database.prefix + table} AS ${AS} ${statements} `;
     }
 
+    /** build query - order
+     * @param {string[]} column - which columns to order
+     * @param {boolean[]} ascending - order direction (MUST have the same number of arrays as column)
+     * @returns {string} - ORDER BY <statements>
+     */
+    db_buildquery_order(column = [''], ascending = [true]) {
+        if (column === ['']) { return ''; }
+
+        let list = [];
+        ascending.forEach((value, index) => {
+            list.push(`${column[index]} ${(value === true) ? 'ASC' : 'DESC'}`);
+        });
+        return `ORDER BY ${list.join(', ')} `;
+    }
+
     /** build query - insert
      * @param {table} table - which table to insert (DO NOT INCLUDE PREFIX!!)
      * @param {[string]} columns - Columns for insert

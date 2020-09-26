@@ -21,6 +21,7 @@ app.get('/', function (req, res, queryCallback) {
     query += db.db_buildquery_join('users', 'u', 'ON (u.uid = t.uid)');
     query += db.db_buildquery_join('status', 's', 'ON (s.stid = t.status)');
     query += db.db_buildquery_join('priority', 'p', 'ON (p.prid = t.priority)');
+    query += db.db_buildquery_order(['tid'],[true]);
     console.log(`QUERY ---------- ${query}`);
     //make a callback for the database
     db.db_query(query, (rows) => {
