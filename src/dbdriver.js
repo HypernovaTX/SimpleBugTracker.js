@@ -23,7 +23,7 @@ class database {
     db_connect() {
         connection = mysql.createConnection(DBCONFIG);
         connection.connect(function (error) {
-            if (error) { console.log(error); }
+            if (error) { console.log(error.message); }
             console.log(`[Database] Connected!`);
         });
     }

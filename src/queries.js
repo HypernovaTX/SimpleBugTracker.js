@@ -15,7 +15,6 @@ class queries {
         query += db.db_buildquery_join(`${database.prefix}users`, 'u', 'ON (u.uid = t.uid)');
         query += db.db_buildquery_join(`${database.prefix}status`, 's', 'ON (s.stid = t.status)');
         query += db.db_buildquery_join(`${database.prefix}priority`, 'p', 'ON (p.prid = t.priority)');
-        query += db.db_buildquery_order(['tid'],[true]);
         return query;
     }
 }

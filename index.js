@@ -10,31 +10,7 @@ const quickQuery = new queries();
 const CONFIG = require("./config.json");
 const { exit } = require('process');
 
-
 /*app.get('/', function (req, res, queryCallback) {
-    db.db_connect();
-    let query = db.db_buildquery_select([
-        't.*',
-        'u.name AS username',
-        's.name AS statusname',
-        's.color AS statuscolor',
-        'p.name AS priorityname',
-        'p.color AS prioritycolor'
-    ], 't', 'tickets');
-    query += db.db_buildquery_join('users', 'u', 'ON (u.uid = t.uid)');
-    query += db.db_buildquery_join('status', 's', 'ON (s.stid = t.status)');
-    query += db.db_buildquery_join('priority', 'p', 'ON (p.prid = t.priority)');
-    query += db.db_buildquery_order(['tid'],[true]);
-    console.log('Req is: VVVV');
-    console.log(req);
-    console.log(`QUERY ---------- ${query}`);
-    //make a callback for the database
-    db.db_query(query, (rows) => {
-        if (!rows.length) { queryCallback(res.send('No results!')); }
-        queryCallback(res.send(`${JSON.stringify(rows)}`));
-        db.db_disconnect();
-        res.end();
-    });
 })*/
 
 app.use(express.json());
@@ -46,14 +22,18 @@ app.post('/', function (request, response, queryCallback) {
     let sortDirection = [true]; //true is ASC, false is DESC
 
     if (request.body !== undefined) {
-        console.log(request.body.test);
+        sortItem = request.body.sortItem;
+        sortDirection = request.body.sortDirection;
     }
     let query = quickQuery.basicTicketList();
     query += db.db_buildquery_order(sortItem, sortDirection);
+    console.log(`[QUERY] -- ${query}`);
 
     //make a callback for the database
     db.db_query(query, (rows) => {
-        if (!rows.length) { queryCallback(response.send('["No results!"]')); }
+        if (!rows.length) {
+            queryCallback(response.send('["No results!"]'));
+        }
         queryCallback(response.send(`${JSON.stringify(rows)}`));
         db.db_disconnect();
         response.end();
