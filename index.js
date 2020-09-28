@@ -41,10 +41,15 @@ app.use(express.json());
 
 app.post('/', function (request, response, queryCallback) {
     db.db_connect();
+    //default sorting method
+    let sortItem = ['t.tid'];
+    let sortDirection = [true]; //true is ASC, false is DESC
+
     if (request.body !== undefined) {
         console.log(request.body.test);
     }
     let query = quickQuery.basicTicketList();
+    query += db.db_buildquery_order(sortItem, sortDirection);
 
     //make a callback for the database
     db.db_query(query, (rows) => {

@@ -114,7 +114,7 @@ class database {
             return '';
         }
         columns.forEach(number => {
-            number
+            
         });
         return `INSERT INTO ${table}
             (${columns.join(', ')})
