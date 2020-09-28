@@ -5,9 +5,11 @@ app.use(cors());
 
 const dbimport = require('./src/dbdriver.js');
 const db = new dbimport();
+const queries = require('./src/queries.js');
+const quickQuery = new queries();
 const CONFIG = require("./config.json");
-const { isUndefined } = require('util');
-let get_output = '';
+const { exit } = require('process');
+
 
 /*app.get('/', function (req, res, queryCallback) {
     db.db_connect();
@@ -42,18 +44,33 @@ app.post('/', function (request, response, queryCallback) {
     if (request.body !== undefined) {
         console.log(request.body.test);
     }
-    let query = db.db_buildquery_select([
-        't.*',
-        'u.name AS username',
-        's.name AS statusname',
-        's.color AS statuscolor',
-        'p.name AS priorityname',
-        'p.color AS prioritycolor'
-    ], 't', 'tickets');
-    query += db.db_buildquery_join('users', 'u', 'ON (u.uid = t.uid)');
-    query += db.db_buildquery_join('status', 's', 'ON (s.stid = t.status)');
-    query += db.db_buildquery_join('priority', 'p', 'ON (p.prid = t.priority)');
-    query += db.db_buildquery_order(['tid'],[true]);
+    let query = quickQuery.basicTicketList();
+
+    //make a callback for the database
+    db.db_query(query, (rows) => {
+        if (!rows.length) { queryCallback(response.send('["No results!"]')); }
+        queryCallback(response.send(`${JSON.stringify(rows)}`));
+        db.db_disconnect();
+        response.end();
+    });
+})
+
+app.post('/newticket', function (request, response, queryCallback) {
+    db.db_connect();
+    let POSTDATA = [];
+    const insertColumns = ['title', 'description', 'status', 'priority', 'user'];
+    if (request.body === undefined) {
+        response.send('NO DATA IMPORTED');
+    }
+
+    POSTDATA = [
+        request.body.title,
+        request.body.description,
+        request.body.status,
+        request.body.priority,
+        '1' //SET 1 as a placeholder until I implement user functions
+    ];
+    let query = db.db_buildquery_insert(`${CONFIG.database.prefix}tickets`, insertColumns, POSTDATA);
 
     //make a callback for the database
     db.db_query(query, (rows) => {

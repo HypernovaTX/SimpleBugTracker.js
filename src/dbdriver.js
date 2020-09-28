@@ -56,7 +56,7 @@ class database {
     /** build query - select
      * @param {[string]} columns - Columns for SELECT
      * @param {string} AS - for AS (leave '' so it will not be used)
-     * @param {*} table - table for FROM (DO NOT INCLUDE PREFIX!!)
+     * @param {*} table - table for FROM
      * @returns {string} - SELECT <columns> FROM <table>
      */
     db_buildquery_select(columns = ['*'], AS = '', table) {
@@ -66,7 +66,7 @@ class database {
         if (AS !== '') { asAdd = `AS ${AS}`; }
 
         return `SELECT ${columns.join(', ')} 
-                FROM ${CONFIG.database.prefix + table} ${asAdd} `;
+                FROM ${table} ${asAdd} `;
     }
 
     /** build query - where
@@ -78,14 +78,14 @@ class database {
     }
 
     /** build query - join
-     * @param {*} table - table for FROM (DO NOT INCLUDE PREFIX!!)
+     * @param {*} table - table for FROM
      * @param {string} AS - for AS (cannot be left blank)
      * @param {string} statements
      * @returns {string} - JOIN <statements>
      */
     db_buildquery_join(table = '', AS = '', statements = '') {
         if (table === null || AS === null) { return ''; }
-        return `JOIN ${CONFIG.database.prefix + table} AS ${AS} ${statements} `;
+        return `JOIN ${table} AS ${AS} ${statements} `;
     }
 
     /** build query - order
@@ -104,7 +104,7 @@ class database {
     }
 
     /** build query - insert
-     * @param {table} table - which table to insert (DO NOT INCLUDE PREFIX!!)
+     * @param {table} table - which table to insert
      * @param {[string]} columns - Columns for insert
      * @param {[string]} values - Values to insert
      * @returns {string} - INSERT INTO <table> (<columns>) VALUES (<values>)
@@ -116,7 +116,7 @@ class database {
         columns.forEach(number => {
             number
         });
-        return `INSERT INTO ${CONFIG.database.prefix + table}
+        return `INSERT INTO ${table}
             (${columns.join(', ')})
             VALUES (${values.join(', ')}) `
     }
