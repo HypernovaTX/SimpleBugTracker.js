@@ -40,6 +40,26 @@ app.post('/', function (request, response, queryCallback) {
     });
 })
 
+app.post('/quickquery', function (request, response, queryCallback) {
+    db.db_connect();
+    if (request.body !== undefined) {
+        return;
+    }
+
+    let query = db.db_buildquery_select(['*'], database.prefix + request.body.table);
+    console.log(`[QUERY #2] -- ${query}`);
+
+    //make a callback for the database
+    db.db_query(query, (rows) => {
+        if (!rows.length) {
+            queryCallback(response.send('["No results!"]'));
+        }
+        queryCallback(response.send(`${JSON.stringify(rows)}`));
+        db.db_disconnect();
+        response.end();
+    });
+})
+
 app.post('/newticket', function (request, response, queryCallback) {
     db.db_connect();
     let POSTDATA = [];
