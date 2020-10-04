@@ -27,7 +27,7 @@ app.post('/', function (request, response, queryCallback) {
     }
     let query = quickQuery.basicTicketList();
     query += db.db_buildquery_order(sortItem, sortDirection);
-    console.log(`[QUERY] -- ${query}`);
+    //console.log(`[QUERY] -- ${query}`);
 
     //make a callback for the database
     db.db_query(query, (rows) => {
@@ -42,11 +42,11 @@ app.post('/', function (request, response, queryCallback) {
 
 app.post('/quickquery', function (request, response, queryCallback) {
     db.db_connect();
-    if (request.body !== undefined) {
+    if (request.body === undefined) {
         return;
     }
 
-    let query = db.db_buildquery_select(['*'], database.prefix + request.body.table);
+    let query = db.db_buildquery_select(['*'], '', CONFIG.database.prefix + request.body.table);
     console.log(`[QUERY #2] -- ${query}`);
 
     //make a callback for the database

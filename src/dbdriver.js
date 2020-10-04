@@ -24,7 +24,7 @@ class database {
         connection = mysql.createConnection(DBCONFIG);
         connection.connect(function (error) {
             if (error) { console.log(error.message); }
-            console.log(`[Database] Connected!`);
+            //console.log(`[Database] Connected!`);
         });
     }
 
@@ -32,7 +32,7 @@ class database {
     db_disconnect() {
         connection.end(function (error) {
             if (error) { console.log(`[Database] Error: ${error.message}`); }
-            console.log(`[Database] Disconnected!`);
+            //console.log(`[Database] Disconnected!`);
         });
     }
 
@@ -48,7 +48,7 @@ class database {
             }
           
             console.log('[Database] Data received!');
-            console.log(`[Database] Within query: ${JSON.stringify(rows)}`);
+            //console.log(`[Database] Within query: ${JSON.stringify(rows)}`);
             return queryCallback(rows);
         });
     }
