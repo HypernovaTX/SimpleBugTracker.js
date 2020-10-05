@@ -40,16 +40,16 @@ class database {
      * @param {string} input - The query that needs to run, please use db_buildquery_* functions
      * @param {(rows) => {}} queryCallback - Needs to have a callback: (rows) => { <codes to obtain "rows" (as object)> }
      */
-    db_query(input, queryCallback) {
+    db_query(input, queryCallback, noReturn = false) {
         connection.query(input, (error, rows) => {
             if (error || input === null) {
                 console.log(`[Database] Error: ${error.message || 'input is NULL'}`);
-                return queryCallback(error);
+                if (!noReturn) { return queryCallback(error); } 
             }
           
             console.log('[Database] Data received!');
             //console.log(`[Database] Within query: ${JSON.stringify(rows)}`);
-            return queryCallback(rows);
+            if (!noReturn) { return queryCallback(rows); }
         });
     }
 
@@ -113,12 +113,10 @@ class database {
         if (table === null || columns === [''] || values === ['']) {
             return '';
         }
-        columns.forEach(number => {
-            
+        values.forEach((data, index) => {
+            values[index] = (typeof data === 'string') ? `'${data}'` : data;
         });
-        return `INSERT INTO ${table}
-            (${columns.join(', ')})
-            VALUES (${values.join(', ')}) `
+        return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')}) `
     }
 
     //Q: Why isn't there a delete query?

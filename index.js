@@ -14,9 +14,10 @@ const { exit } = require('process');
 })*/
 
 app.use(express.json());
+db.db_connect();
 
 app.post('/', function (request, response, queryCallback) {
-    db.db_connect();
+    //db.db_connect();
     //default sorting method
     let sortItem = ['t.tid'];
     let sortDirection = [true]; //true is ASC, false is DESC
@@ -35,19 +36,20 @@ app.post('/', function (request, response, queryCallback) {
             queryCallback(response.send('["No results!"]'));
         }
         queryCallback(response.send(`${JSON.stringify(rows)}`));
-        db.db_disconnect();
+        //db.db_disconnect();
         response.end();
     });
 })
 
 app.post('/quickquery', function (request, response, queryCallback) {
-    db.db_connect();
+    //db.db_connect();
     if (request.body === undefined) {
         return;
     }
 
     let query = db.db_buildquery_select(['*'], '', CONFIG.database.prefix + request.body.table);
-    console.log(`[QUERY #2] -- ${query}`);
+    //console.log(`[QUERY #2] -- ${query}`);
+    console.log(`Running "/quickquery"`);
 
     //make a callback for the database
     db.db_query(query, (rows) => {
@@ -55,15 +57,15 @@ app.post('/quickquery', function (request, response, queryCallback) {
             queryCallback(response.send('["No results!"]'));
         }
         queryCallback(response.send(`${JSON.stringify(rows)}`));
-        db.db_disconnect();
+        //db.db_disconnect();
         response.end();
     });
 })
 
 app.post('/newticket', function (request, response, queryCallback) {
-    db.db_connect();
+    //db.db_connect();
     let POSTDATA = [];
-    const insertColumns = ['title', 'description', 'status', 'priority', 'user'];
+    const insertColumns = ['title', 'description', 'status', 'priority', 'platform', 'time', 'uid'];
     if (request.body === undefined) {
         response.send('NO DATA IMPORTED');
     }
@@ -71,19 +73,18 @@ app.post('/newticket', function (request, response, queryCallback) {
     POSTDATA = [
         request.body.title,
         request.body.description,
-        request.body.status,
-        request.body.priority,
-        '1' //SET 1 as a placeholder until I implement user functions
+        parseInt(request.body.status),
+        parseInt(request.body.priority),
+        parseInt(request.body.platform),
+        parseInt(request.body.time),
+        parseInt(request.body.uid)
     ];
     let query = db.db_buildquery_insert(`${CONFIG.database.prefix}tickets`, insertColumns, POSTDATA);
-
+    console.log(`[QUERY ADD TICKET] -- ${query}`);
     //make a callback for the database
     db.db_query(query, (rows) => {
-        if (!rows.length) { queryCallback(response.send('["No results!"]')); }
-        queryCallback(response.send(`${JSON.stringify(rows)}`));
-        db.db_disconnect();
-        response.end();
-    });
+        response.send('SENT');
+    }, true);
 })
 
 var server = app.listen(8080, function () {
