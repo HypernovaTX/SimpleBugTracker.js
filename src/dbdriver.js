@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var mysql = require('mysql')
 var cors = require('cors');
+var SqlString = require('sqlstring');
 app.use(cors());
 
 //initialize database variables and constants
@@ -114,7 +115,9 @@ class database {
             return '';
         }
         values.forEach((data, index) => {
-            values[index] = (typeof data === 'string') ? `'${data}'` : data;
+            if (typeof data === 'string') {
+                values[index] = SqlString.escape(data);
+            }
         });
         return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')}) `
     }
