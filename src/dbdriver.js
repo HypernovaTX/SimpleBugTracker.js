@@ -45,12 +45,13 @@ class database {
         connection.query(input, (error, rows) => {
             if (error || input === null) {
                 console.log(`[Database] Error: ${error.message || 'input is NULL'}`);
-                if (!noReturn) { return queryCallback(error); } 
+                return queryCallback(error);
             }
           
             console.log('[Database] Data received!');
             //console.log(`[Database] Within query: ${JSON.stringify(rows)}`);
             if (!noReturn) { return queryCallback(rows); }
+            return queryCallback('DONE');
         });
     }
 

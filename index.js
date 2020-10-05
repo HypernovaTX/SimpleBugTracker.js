@@ -82,9 +82,7 @@ app.post('/newticket', function (request, response, queryCallback) {
     let query = db.db_buildquery_insert(`${CONFIG.database.prefix}tickets`, insertColumns, POSTDATA);
     console.log(`[QUERY ADD TICKET] -- ${query}`);
     //make a callback for the database
-    db.db_query(query, (rows) => {
-        response.send('SENT');
-    }, true);
+    db.db_query(query, () => {response.send('SENT')}, true);
 })
 
 var server = app.listen(8080, function () {
