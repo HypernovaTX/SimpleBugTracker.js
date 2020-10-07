@@ -76,7 +76,7 @@ class database {
      * @returns {string} - WHERE <statements>
      */
     db_buildquery_where(statements = '') {
-        return `WHERE (${statements}) `;
+        return `WHERE (${SqlString.escape(statements)}) `;
     }
 
     /** build query - join
@@ -121,6 +121,25 @@ class database {
             }
         });
         return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')}) `
+    }
+
+    /** build query - update
+     * @param {table} table - which table to insert
+     * @param {[string]} columns - Columns for insert
+     * @param {[string]} values - Values to insert
+     * @returns {string} - UPDATE <table> SET (<columns..> = <>)
+     */
+    db_buildquery_update(table, columns = [''], values = ['']) {
+        if (table === null || columns === [''] || values === ['']) {
+            return '';
+        }
+        let updateArray = [];
+        columns.forEach((data, index) => {
+            if (typeof data === 'string') {
+                updateArray.push(`'${columnsSqlString.escape(data)}' = '${columnsSqlString.escape(columns[index])}'`);
+            }
+        });
+        return `UPDATE ${table} SET (${columns.join(', ')}) `
     }
 
     //Q: Why isn't there a delete query?

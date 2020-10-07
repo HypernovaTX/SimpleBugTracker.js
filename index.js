@@ -85,6 +85,30 @@ app.post('/newticket', function (request, response, queryCallback) {
     db.db_query(query, () => {response.send('SENT')}, true);
 })
 
+app.post('/updateticket', function (request, response, queryCallback) {
+    //db.db_connect();
+    let POSTDATA = [];
+    const updateColumns = ['title', 'description', 'status', 'priority', 'platform', 'time', 'uid'];
+    if (request.body === undefined) {
+        response.send('NO DATA IMPORTED');
+    }
+
+    POSTDATA = [
+        request.body.title,
+        request.body.description,
+        parseInt(request.body.status),
+        parseInt(request.body.priority),
+        parseInt(request.body.platform),
+        parseInt(request.body.time),
+        parseInt(request.body.uid)
+    ];
+    let query = db.db_buildquery_update(`${CONFIG.database.prefix}tickets`, updateColumns, POSTDATA);
+    query += db.db_buildquery_where('request.body.tid');
+    console.log(`[QUERY UPDATE TICKET] -- ${query}`);
+    //make a callback for the database
+    db.db_query(query, () => {response.send('SENT')}, true);
+})
+
 var server = app.listen(8080, function () {
     var host = server.address().address;
     var port = server.address().port;
