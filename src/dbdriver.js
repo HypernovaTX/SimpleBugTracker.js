@@ -136,10 +136,10 @@ class database {
         let updateArray = [];
         columns.forEach((data, index) => {
             if (typeof data === 'string') {
-                updateArray.push(`'${columnsSqlString.escape(data)}' = '${columnsSqlString.escape(columns[index])}'`);
+                updateArray.push(`${'`' + data + '`'} = ${SqlString.escape(values[index])}`);
             }
         });
-        return `UPDATE ${table} SET (${columns.join(', ')}) `
+        return `UPDATE ${table} SET ${updateArray.join(', ')} `
     }
 
     //Q: Why isn't there a delete query?

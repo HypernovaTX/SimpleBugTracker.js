@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var cors = require('cors');
+var SqlString = require('sqlstring');
 app.use(cors());
 
 const dbimport = require('./src/dbdriver.js');
@@ -88,7 +89,7 @@ app.post('/newticket', function (request, response, queryCallback) {
 app.post('/updateticket', function (request, response, queryCallback) {
     //db.db_connect();
     let POSTDATA = [];
-    const updateColumns = ['title', 'description', 'status', 'priority', 'platform', 'time', 'uid'];
+    const updateColumns = ['title', 'description', 'status', 'priority', 'platform', 'lastedit', 'uid'];
     if (request.body === undefined) {
         response.send('NO DATA IMPORTED');
     }
@@ -103,7 +104,7 @@ app.post('/updateticket', function (request, response, queryCallback) {
         parseInt(request.body.uid)
     ];
     let query = db.db_buildquery_update(`${CONFIG.database.prefix}tickets`, updateColumns, POSTDATA);
-    query += db.db_buildquery_where('request.body.tid');
+    query += `WHERE (tid = ${SqlString.escape(request.body.tid)}) `;
     console.log(`[QUERY UPDATE TICKET] -- ${query}`);
     //make a callback for the database
     db.db_query(query, () => {response.send('SENT')}, true);
