@@ -90,9 +90,7 @@ app.post('/updateticket', function (request, response, queryCallback) {
     //db.db_connect();
     let POSTDATA = [];
     const updateColumns = ['title', 'description', 'status', 'priority', 'platform', 'lastedit', 'uid'];
-    if (request.body === undefined) {
-        response.send('NO DATA IMPORTED');
-    }
+    if (request.body === undefined) { response.send('NO DATA IMPORTED'); }
 
     POSTDATA = [
         request.body.title,
@@ -108,6 +106,19 @@ app.post('/updateticket', function (request, response, queryCallback) {
     console.log(`[QUERY UPDATE TICKET] -- ${query}`);
     //make a callback for the database
     db.db_query(query, () => {response.send('SENT')}, true);
+})
+
+app.post('/deleteticket', function (request, response, queryCallback) {
+    //db.db_connect();
+    const tid = request.body.tid;
+    if (request.body === undefined) { response.send('NO DATA IMPORTED'); }
+    if (tid === undefined) { response.send('NO TICKET ID SELECTED'); }
+
+    let query = db.db_buildquery_update(`${CONFIG.database.prefix}tickets`, [status], [-1]);
+    query += `WHERE (tid = ${SqlString.escape(request.body.tid)}) `;
+    console.log(`[QUERY DELETE TICKET] -- ${query}`);
+    //make a callback for the database
+    db.db_query(query, () => {response.send('DELETED')}, true);
 })
 
 var server = app.listen(8080, function () {
