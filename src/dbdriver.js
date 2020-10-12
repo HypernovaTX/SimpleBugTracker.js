@@ -90,6 +90,17 @@ class database {
         return `JOIN ${table} AS ${AS} ${statements} `;
     }
 
+    /** build query - left join
+     * @param {*} table - table for FROM
+     * @param {string} AS - for AS (cannot be left blank)
+     * @param {string} statements
+     * @returns {string} - JOIN <statements>
+     */
+    db_buildquery_leftjoin(table = '', AS = '', statements = '') {
+        if (table === null || AS === null) { return ''; }
+        return `LEFT JOIN ${table} AS ${AS} ${statements} `;
+    }
+
     /** build query - order
      * @param {string[]} column - which columns to order
      * @param {boolean[]} ascending - order direction (MUST have the same number of arrays as column)

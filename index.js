@@ -89,7 +89,7 @@ app.post('/newticket', function (request, response) {
 app.post('/updateticket', function (request, response) {
     //db.db_connect();
     let POSTDATA = [];
-    const updateColumns = ['title', 'description', 'status', 'priority', 'platform', 'lastedit', 'uid'];
+    const updateColumns = ['title', 'description', 'status', 'priority', 'platform', 'lastedit', 'lastuid'];
     if (request.body === undefined) { response.send('NO DATA IMPORTED'); }
 
     POSTDATA = [
