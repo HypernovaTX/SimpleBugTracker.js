@@ -34,7 +34,7 @@ app.post('/', function (request, response, queryCallback) {
     //make a callback for the database
     db.db_query(query, (rows) => {
         if (!rows.length) {
-            queryCallback(response.send('["No results!"]'));
+            queryCallback(response.send('NO DATA'));
         }
         queryCallback(response.send(`${JSON.stringify(rows)}`));
         //db.db_disconnect();
